@@ -3,4 +3,9 @@
 .classpath
 .project
 .settings
+venv
+*.log
+__pycache__
+.coverage
+cover
 
