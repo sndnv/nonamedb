@@ -1,5 +1,6 @@
 package nonamedb.test.specs.unit
 
-import org.scalatest.{fixture, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-trait UnitSpec extends fixture.FlatSpec with Matchers
+trait UnitSpec extends AsyncFlatSpec with Matchers

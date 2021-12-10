@@ -20,14 +20,14 @@ class EngineActor extends Actor with ActorLogging {
         } else {
           log.debug(
             "[PUT] {} value with key [{}]",
-            if (store.get(key).isDefined) "Updating" else "Adding",
+            if (store.contains(key)) "Updating" else "Adding",
             key
           )
 
           store + (key -> value)
         }
 
-      sender ! Done
+      sender() ! Done
       context.become(process(updatedStore))
 
     case Get(key) =>
@@ -39,7 +39,7 @@ class EngineActor extends Actor with ActorLogging {
         if (result.isDefined) "found" else "not found"
       )
 
-      sender ! result
+      sender() ! result
   }
 
   override def receive: Receive = process(Map.empty)
@@ -49,7 +49,5 @@ object EngineActor {
   final case class Put(key: Key, value: Value)
   final case class Get(key: Key)
 
-  def props(): Props = Props(
-    classOf[EngineActor]
-  )
+  def props(): Props = Props(new EngineActor())
 }

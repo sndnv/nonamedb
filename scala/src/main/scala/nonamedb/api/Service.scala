@@ -5,18 +5,17 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import akka.stream.ActorMaterializer
 import akka.util.ByteString
 import nonamedb.storage.Engine
 
-import scala.concurrent.{ExecutionContextExecutor, Future}
+import scala.concurrent.Future
 
 class Service(engine: Engine)(implicit system: ActorSystem) {
-  private implicit val materializer: ActorMaterializer = ActorMaterializer()
-  private implicit val executionContext: ExecutionContextExecutor = system.dispatcher
+
+  import system.dispatcher
 
   def start(bindAddress: String, bindPort: Int): Future[Http.ServerBinding] =
-    Http().bindAndHandle(routes, bindAddress, bindPort)
+    Http().newServerAt(bindAddress, bindPort).bind(routes)
 
   val routes: Route =
     path(Segment) { id =>
